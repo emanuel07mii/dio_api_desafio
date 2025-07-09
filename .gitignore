@@ -143,6 +143,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+workout_api/
 
 # Spyder project settings
 .spyderproject
