@@ -1,8 +1,6 @@
 from datetime import datetime
 from sqlalchemy import Integer, String, Float, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from api.categorias.models import CategoriaModel
-from api.centro_treinamento.models import CentroTreinamentoModel
 from api.contrib.models import BaseModel
 
 class AtletaModel(BaseModel):
@@ -20,3 +18,19 @@ class AtletaModel(BaseModel):
     categoria_id: Mapped[int] = mapped_column(ForeignKey('categorias.pk_id'))
     centro_treinamento: Mapped['CentroTreinamentoModel'] = relationship(back_populates='atleta')
     centro_treinamento_id: Mapped[int] = mapped_column(ForeignKey('centro_treinamento.pk_id'))
+
+class CategoriaModel(BaseModel):
+    __tablename__ = 'categorias'
+
+    pk_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    nome: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    atleta: Mapped['AtletaModel'] = relationship(back_populates='categoria')
+
+class CentroTreinamentoModel(BaseModel):
+    __tablename__ = 'centros_treinamento'
+
+    pk_id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    nome: Mapped[str] = mapped_column(String(50), nullable=False, unique=True)
+    endereco: Mapped[str] = mapped_column(String(60), nullable=False)
+    proprietario: Mapped[str] = mapped_column(String(30), nullable=False)
+    atleta: Mapped['AtletaModel'] = relationship(back_populates='categoria')
