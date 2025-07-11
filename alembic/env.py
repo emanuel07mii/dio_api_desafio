@@ -9,6 +9,11 @@ from alembic import context
 from api.contrib.models import BaseModel
 from api.contrib.repository.models import *
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
 config = context.config
 
 if config.config_file_name is not None:
@@ -28,7 +33,7 @@ def run_migrations_offline() -> None:
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = config.get_main_option("sqlalchemy.url", os.getenv("DATABASE_URL"))
     context.configure(
         url=url,
         target_metadata=target_metadata,
