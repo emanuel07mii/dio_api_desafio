@@ -144,6 +144,7 @@ ENV/
 env.bak/
 venv.bak/
 workout_api/
+test_url/
 
 # Spyder project settings
 .spyderproject

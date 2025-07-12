@@ -1,8 +1,10 @@
+VENV_PATH=./workout_api/bin
+
 run:
-	@uvicorn api.main:app --reload
+	@$(VENV_PATH)/uvicorn api.main:app --reload
 
 create-migrations:
-	@PYTHONPATH=$PYTHONPATH: $(pwd) alembic revision --autogenerate -m $(d)
+	@PYTHONPATH=$(PYTHONPATH):$(pwd) $(VENV_PATH)/alembic revision --autogenerate -m "$(d)"
 
 run-migrations:
-	@PYTHONPATH=$PYTHONPATH: $(pwd) alembic upgrade head
+	@PYTHONPATH=$(PYTHONPATH):$(pwd) $(VENV_PATH)/alembic upgrade head
