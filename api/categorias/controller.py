@@ -26,7 +26,6 @@ async def post(
 
     db_session.add(categoria_model)
     await db_session.commit()
-    breakpoint()
     
     return categoria_out
 
