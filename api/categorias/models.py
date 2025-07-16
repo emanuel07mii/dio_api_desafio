@@ -1,6 +1,5 @@
 from sqlalchemy import Integer, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from api.atleta.models import AtletaModel
 from api.contrib.models import BaseModel
 
 class CategoriaModel(BaseModel):
