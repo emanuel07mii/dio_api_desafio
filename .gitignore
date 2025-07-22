@@ -145,6 +145,7 @@ env.bak/
 venv.bak/
 workout_api/
 test_url/
+new_test_db.py
 
 # Spyder project settings
 .spyderproject

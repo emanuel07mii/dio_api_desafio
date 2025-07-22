@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 from pydantic import Field, PositiveFloat
 
 from api.categorias.schemas import CategoriaIn
@@ -20,3 +20,13 @@ class AtletaIn(Atleta):
 
 class AtletaOut(Atleta, OutMixin):
     pass
+
+class AtletaUpdate(BaseSchema):
+    nome: Annotated[Optional[str], Field(None, description="Nome do atleta", example="João", max_length=50)]
+    # cpf: Annotated[Optional[str], Field(None, description="CPF do atleta", example="12345678900", max_length=11)]
+    idade: Annotated[Optional[int], Field(None, description="Idade do atleta", example=25)]
+    peso: Annotated[Optional[PositiveFloat], Field(None, description="Peso do atleta em kg", example=75.5)]
+    altura: Annotated[Optional[PositiveFloat], Field(None, description="Altura do atleta em metros", example=1.75)]
+    # sexo: Annotated[Optional[str], Field(None, description="Sexo do atleta", example="M", max_length=1)]
+    # categoria: Annotated[Optional[CategoriaIn], Field(None, description="Categoria do Atleta")]
+    # centro_treinamento: Annotated[Optional[CentroTreinamentoAtleta], Field(None, description="Centro de Treinamento do Atleta")]
