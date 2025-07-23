@@ -20,11 +20,17 @@ async def post(
     centro_treinamento_in: CentroTreinamentoIn = Body(...)
 ) -> CentroTreinamentoOut:
     
-    centro_treinamento_out = CentroTreinamentoOut(id=uuid4(), **centro_treinamento_in.model_dump())
-    centro_treinamento_model = CentroTreinamentoModel(**centro_treinamento_out.model_dump())
+    try:
+        centro_treinamento_out = CentroTreinamentoOut(id=uuid4(), **centro_treinamento_in.model_dump())
+        centro_treinamento_model = CentroTreinamentoModel(**centro_treinamento_out.model_dump())
 
-    db_session.add(centro_treinamento_model)
-    await db_session.commit()
+        db_session.add(centro_treinamento_model)
+        await db_session.commit()
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_303_SEE_OTHER,
+            detail=f'Já existe um centro de treinamento com o nome: {centro_treinamento_in.nome}'
+        )
     
     return centro_treinamento_out
 

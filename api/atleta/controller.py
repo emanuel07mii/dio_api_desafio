@@ -45,7 +45,6 @@ async def post(
     
     try:
         atleta_out = AtletaOut(id=uuid4(), created_at=datetime.now(timezone.utc),**atleta_in.model_dump())
-        # breakpoint()
         atleta_model = AtletaModel(**atleta_out.model_dump(exclude={'categoria', 'centro_treinamento'}))
         atleta_model.categoria_id = categoria.pk_id
         atleta_model.centro_treinamento_id = centro_treinamento_nome.pk_id
@@ -54,8 +53,8 @@ async def post(
         await db_session.commit()
     except Exception:
         raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f'Ocorreu um erro ao inserir os dados no banco.'
+            status_code=status.HTTP_303_SEE_OTHER,
+            detail=f'Já existe um atleta cadastrado com o cpf: {atleta_in.cpf}'
         )
 
     return atleta_out
