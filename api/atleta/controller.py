@@ -91,6 +91,26 @@ async def query(id: UUID4, db_session: DatabaseDependency) -> AtletaOut:
     
     return atleta
 
+# GET BY NAME AND CPF
+@router.get(
+    '/{name}/{cpf}',
+    summary='Consultar uma atleta pelo Nome e CPF',
+    status_code=status.HTTP_200_OK,
+    response_model=AtletaOut,
+)
+async def query(name: str = None, cpf: str = None, db_session: DatabaseDependency = None) -> AtletaOut:
+    atleta: AtletaOut = (
+        await db_session.execute(select(AtletaModel).filter_by(nome=name, cpf=cpf))
+    ).scalars().first()
+
+    if not atleta:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f'Atleta não encontrado(a) com nome: {name} e cpf: {cpf}.'
+        )
+    
+    return atleta
+
 # Patch Para editar um atleta dinamicamente
 @router.patch(
     '/{id}',
