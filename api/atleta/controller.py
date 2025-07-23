@@ -11,6 +11,8 @@ from api.centro_treinamento.models import CentroTreinamentoModel
 from api.contrib.dependencies import DatabaseDependency
 from datetime import datetime, timezone
 from sqlalchemy.future import select
+from fastapi_pagination import Page
+from fastapi_pagination.ext.sqlalchemy import paginate
 
 router = APIRouter()
 
