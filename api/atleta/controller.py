@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, status
 from fastapi.params import Body
 from pydantic import UUID4
 
-from api.atleta.schemas import AtletaIn, AtletaOut, AtletaUpdate
+from api.atleta.schemas import AtletaIn, AtletaOut, AtletaUpdate, AtletaOutSummary
 from api.atleta.models import AtletaModel
 from api.categorias.models import CategoriaModel
 from api.categorias.schemas import CategoriaOut
@@ -64,12 +64,12 @@ async def post(
     '/',
     summary='Consultar todos os atletas',
     status_code=status.HTTP_200_OK,
-    response_model=list[AtletaOut],
+    response_model=list[AtletaOutSummary],
 )
-async def query(db_session: DatabaseDependency) -> list[AtletaOut]:
-    atletas: list[AtletaOut] = (await db_session.execute(select(AtletaModel))).scalars().all()
+async def query(db_session: DatabaseDependency) -> list[AtletaOutSummary]:
+    atletas: list[AtletaOutSummary] = (await db_session.execute(select(AtletaModel))).scalars().all()
     
-    return [AtletaOut.model_validate(atleta) for atleta in atletas]
+    return [AtletaOutSummary.model_validate(atleta) for atleta in atletas]
 
 # GET BY ID
 @router.get(

@@ -30,3 +30,8 @@ class AtletaUpdate(BaseSchema):
     # sexo: Annotated[Optional[str], Field(None, description="Sexo do atleta", example="M", max_length=1)]
     # categoria: Annotated[Optional[CategoriaIn], Field(None, description="Categoria do Atleta")]
     # centro_treinamento: Annotated[Optional[CentroTreinamentoAtleta], Field(None, description="Centro de Treinamento do Atleta")]
+
+class AtletaOutSummary(BaseSchema):
+    nome: Annotated[str, Field(description="Nome do atleta", example="João", max_length=50)]
+    centro_treinamento: Annotated[CentroTreinamentoAtleta, Field(description="Centro de Treinamento do Atleta")]
+    categoria: Annotated[CategoriaIn, Field(description="Categoria do Atleta")]
