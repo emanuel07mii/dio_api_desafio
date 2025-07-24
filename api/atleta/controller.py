@@ -11,8 +11,10 @@ from api.centro_treinamento.models import CentroTreinamentoModel
 from api.contrib.dependencies import DatabaseDependency
 from datetime import datetime, timezone
 from sqlalchemy.future import select
-from fastapi_pagination import Page
-from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi_pagination import Page, paginate, Params
+from fastapi import Depends
+# from fastapi_pagination.ext.sqlalchemy import paginate
+from fastapi_pagination.utils import disable_installed_extensions_check
 
 router = APIRouter()
 
@@ -61,16 +63,20 @@ async def post(
 
     return atleta_out
 
+# GET ALL Atletas
 @router.get(
     '/',
     summary='Consultar todos os atletas',
     status_code=status.HTTP_200_OK,
-    response_model=list[AtletaOutSummary],
+    response_model=Page[AtletaOutSummary],
 )
-async def query(db_session: DatabaseDependency) -> list[AtletaOutSummary]:
-    atletas: list[AtletaOutSummary] = (await db_session.execute(select(AtletaModel))).scalars().all()
+async def query(db_session: DatabaseDependency, params: Params = Depends()) -> Page[AtletaOutSummary]:
+    atletas = (await db_session.execute(select(AtletaModel).order_by(AtletaModel.created_at))).scalars().all()
+    atletas_out = [AtletaOutSummary.model_validate(atleta) for atleta in atletas]
+
     
-    return [AtletaOutSummary.model_validate(atleta) for atleta in atletas]
+    disable_installed_extensions_check()
+    return paginate(atletas_out, params)
 
 # GET BY ID
 @router.get(

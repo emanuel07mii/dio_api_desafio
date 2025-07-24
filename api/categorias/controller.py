@@ -9,6 +9,9 @@ from api.contrib.dependencies import DatabaseDependency
 from sqlalchemy.future import select
 from fastapi import HTTPException
 router = APIRouter()
+from fastapi_pagination import Page, paginate, Params
+from fastapi import Depends
+from fastapi_pagination.utils import disable_installed_extensions_check
 
 @router.post(
     '/',
@@ -39,12 +42,13 @@ async def post(
     '/',
     summary='Consultar todas as categorias',
     status_code=status.HTTP_200_OK,
-    response_model=list[CategoriaOut],
+    response_model=Page[CategoriaOut],
 )
-async def query(db_session: DatabaseDependency) -> list[CategoriaOut]:
-    categorias: list[CategoriaOut] = (await db_session.execute(select(CategoriaModel))).scalars().all()
+async def query(db_session: DatabaseDependency, params: Params = Depends()) -> Page[CategoriaOut]:
+    categorias = (await db_session.execute(select(CategoriaModel).order_by(CategoriaModel.nome))).scalars().all()
     
-    return categorias
+    disable_installed_extensions_check()
+    return paginate(categorias, params)
 
 @router.get(
     '/{id}',
